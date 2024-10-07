@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books In Georgia</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-image: url('https://example.com/bookstore-background.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #2C3E50;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #0067e4;
+        }
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .search-input {
+            width: calc(100% - 40px); /* Adjusted width to account for icon */
+            padding: 8px 35px 8px 15px; /* Reduced padding */
+            border: 1px solid #D1D5DB;
+            border-radius: 9999px;
+            font-size: 18px;
+            outline: none;
+            height: 2vw;
+        }
+        .search-input:focus {
+            border-color: #0067e4;
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.3);
+        }
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .toggle-container {
+            display: flex;
+            border: 1px solid #D1D5DB;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        .toggle-button {
+            padding: 8px 16px;
+            background-color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .toggle-button.active {
+            background-color: #0067e4;
+            color: #FFFFFF;
+        }
+        .random-button {
+            background: none;
+            border: none;
+            color: #0067e4;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .random-icon {
+            margin-right: 5px;
+        }
+        .results-container {
+            margin-top: 20px;
+        }
+        .results-container .category {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .results-container .category.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .category {
+            margin-bottom: 20px;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .category h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #0067e4;
+        }
+        .book-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .book-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .book-item:last-child {
+            border-bottom: none;
+        }
+        .book-title {
+            font-weight: 600;
+            color: #2C3E50;
+            text-decoration: none;
+        }
+        .book-title:hover {
+            text-decoration: underline;
+        }
+        .book-author {
+            font-size: 14px;
+            color: #6B7280;
+        }
+        .book-price {
+            font-weight: 600;
+            color: #27AE60;
+        }
+        .book-item:hover {
+            transform: scale(1.03);
+            background-color: #f0f8ff;
+            transition: transform 0.5s ease, background-color 0.5s ease;
+        }
+        .toggle-button:active, .random-button:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .search-input {
+                height: 40px; /* Fixed height for mobile */
+                font-size: 16px;
+            }
+            /* .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toggle-button, .random-button {
+                font-size: 14px;
+                padding: 10px; 
+            }*/
+            .category h2 {
+                font-size: 16px;
+            }
+            .book-title {
+                font-size: 14px;
+            }
+            .book-author, .book-price {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+            .search-input {
+                font-size: 14px;
+            }
+            .toggle-button, .random-button {
+                font-size: 12px;
+            }
+        }
+
+        /* Improve readability on larger screens */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 900px;
+            }
+        }
+
+        /* Adjust for very small screens */
+        @media (max-width: 320px) {
+            .toggle-container {
+                flex-direction: column;
+            }
+            .toggle-button {
+                border-radius: 0;
+            }
+            .toggle-button:first-child {
+                border-top-left-radius: 9999px;
+                border-top-right-radius: 9999px;
+            }
+            .toggle-button:last-child {
+                border-bottom-left-radius: 9999px;
+                border-bottom-right-radius: 9999px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Books In Georgia 📚</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="ძიება სათაურით...">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </div>
+        <div class="controls">
+            <div class="toggle-container">
+                <button id="titleToggle" class="toggle-button active">📖 სათაური</button>
+                <button id="authorToggle" class="toggle-button">👤 ავტორი</button>
+            </div>
+            <button id="randomButton" class="random-button">
+                <svg class="random-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"></path>
+                </svg>
+                შემთხვევითი წიგნები
+            </button>
+        </div>
+        <div id="results" class="results-container"></div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const titleToggle = document.getElementById('titleToggle');
+        const authorToggle = document.getElementById('authorToggle');
+        const randomButton = document.getElementById('randomButton');
+        const resultsContainer = document.getElementById('results');
+
+        let searchType = 'title';
+
+        titleToggle.addEventListener('click', () => {
+            searchType = 'title';
+            titleToggle.classList.add('active');
+            authorToggle.classList.remove('active');
+            searchInput.placeholder = 'ძიება სათაურით...';
+        });
+
+        authorToggle.addEventListener('click', () => {
+            searchType = 'author';
+            authorToggle.classList.add('active');
+            titleToggle.classList.remove('active');
+            searchInput.placeholder = 'ძიება ავტორით...';
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        randomButton.addEventListener('click', getRandomBooks);
+
+        function performSearch() {
+            const query = searchInput.value;
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: query, search_type: searchType })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function getRandomBooks() {
+            fetch('/random_books', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function displayResults(data) {
+            resultsContainer.innerHTML = '';
+            if (data.length === 0) {
+                resultsContainer.innerHTML = '<p style="text-align: center; font-weight: bold; ">😕 სამწუხაროდ, ვერ ვიპოვე</p>';
+                return;
+            }
+            data.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'category';
+                categoryElement.innerHTML = `<h1>${category.table_name}</h1>`;
+                const bookList = document.createElement('ul');
+                bookList.className = 'book-list';
+                category.books.forEach(book => {
+                    const bookItem = document.createElement('li');
+                    bookItem.className = 'book-item';
+                    bookItem.innerHTML = `
+                        <a href="${book.url || '#'}" target="_blank" class="book-title">${book.title}</a>
+                        <div class="book-author">${book.author || 'Unknown'}</div>
+                        <div class="book-price">₾${book.price || 'N/A'}</div>
+                    `;
+                    bookList.appendChild(bookItem);
+                });
+                categoryElement.appendChild(bookList);
+                resultsContainer.appendChild(categoryElement);
+                
+                // Add visible class to trigger animation
+                setTimeout(() => {
+                    categoryElement.classList.add('visible');
+                }, 100);
+            });
+        }
+
+        function smoothScrollTo(targetPosition, duration) {
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        smoothScrollTo(500, 1000);
+
+        // Example usage: smoothScrollTo(500, 1000); // Scrolls to 500px from the top over 1 second
+    </script>
+</body>
+</html>

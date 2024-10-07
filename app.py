@@ -50,7 +50,7 @@ def sort_tables(tables):
 # Home route to render the page
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index2.html')
 
 
 # Route to handle search queries with a limit
