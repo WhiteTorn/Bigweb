@@ -5,16 +5,21 @@ from psycopg2 import sql
 app = Flask(__name__)
 
 
+# Local connection settings
 # PostgreSQL connection settings
+# def get_db_connection():
+#     conn = psycopg2.connect(
+#         host="localhost",
+#         database="books",
+#         user="postgres",
+#         password="pos123"
+#     )
+#     return conn
+# Heroku connection settings
 def get_db_connection():
-    conn = psycopg2.connect(
-        host="localhost",
-        database="books",
-        user="postgres",
-        password="pos123"
-    )
+    # Use the DATABASE_URL environment variable set by Heroku
+    conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
     return conn
-
 
 # Check which columns exist in the table
 def get_columns_in_table(cursor, table_name):
